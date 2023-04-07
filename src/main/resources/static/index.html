@@ -5,9 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-테스트
-<div th:each="info : ${data}">
-    <div th:text="${info.filePath}"></div>
-</div>
+<h1>파도 예보</h1>
+<ul>
+    <li><a href="/surf/sokcho">속초 - 양양</a></li>
+    <li><a href="/surf/busan">부산</a></li>
+    <li><a href="/surf/jeju">제주</a></li>
+    <li><a href="/surf/taean">태안</a></li>
+</ul>
+
+
 </body>
 </html>

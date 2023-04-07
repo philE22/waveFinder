@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/styles/slides.css}" rel="stylesheet" />
+    <script src="/js/slides.js" defer></script>
 </head>
 <body>
-테스트
-<div th:each="info : ${data}" class="section">
-    <input type="radio" th:field="*{data}" th:value="${info.day}">
-    <img th:src="${info.filePath}"
-    style="width:800px;height:800px"/>
+<div id="slideShow">
+    <ul class="slides">
+        <li th:each="info : ${data}" class="section">
+            <img th:src="${info.filePath}"/>
+        </li>
+    </ul>
+    <p class="controller">
+        <span class="prev">&lang;</span>
+        <span class="next">&rang;</span>
+    </p>
 </div>
 </body>
+<script th:inline="javascript">
+
+
+</script>
 </html>
