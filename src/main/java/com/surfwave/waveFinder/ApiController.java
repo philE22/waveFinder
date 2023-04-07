@@ -2,6 +2,7 @@ package com.surfwave.waveFinder;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +19,9 @@ public class ApiController {
 
     RestTemplate restTemplate = new RestTemplate();
     Gson gson = new Gson();
-    private final String URL = "http://www.khoa.go.kr/api/oceangrid/preOcean/search.do?ServiceKey=OUkrebOp9eqxGzHu5vA3pw==&ResultType=json";
+    private final String URL = "http://www.khoa.go.kr/api/oceangrid/preOcean/search.do?ResultType=json";
+    @Value("${serviceKey}")
+    private String serviceKey;
     private final String SOKCHO = "&type=SOKCHO";
     private final String BUSAN = "&type=BUSAN";
     private final String TAEAN = "&type=TAEAN";
@@ -27,7 +30,8 @@ public class ApiController {
 
     @GetMapping("/sokcho")
     public String sokcho(Model model) {
-        String json = restTemplate.getForObject(URL + SOKCHO, String.class);
+        System.out.println(URL + SOKCHO + serviceKey);
+        String json = restTemplate.getForObject(URL + SOKCHO + serviceKey, String.class);
         Info info = gson.fromJson(json, Info.class);
         List<SurfInfo> data = info.getResult().getData();
         model.addAttribute("data", data);
@@ -36,7 +40,7 @@ public class ApiController {
     }
     @GetMapping("/busan")
     public String busan(Model model) {
-        String json = restTemplate.getForObject(URL + BUSAN, String.class);
+        String json = restTemplate.getForObject(URL + BUSAN + serviceKey, String.class);
         Info info = gson.fromJson(json, Info.class);
         List<SurfInfo> data = info.getResult().getData();
         model.addAttribute("data", data);
@@ -45,7 +49,7 @@ public class ApiController {
     }
     @GetMapping("/jeju")
     public String jeju(Model model) {
-        String json = restTemplate.getForObject(URL + JEJU, String.class);
+        String json = restTemplate.getForObject(URL + JEJU + serviceKey, String.class);
         Info info = gson.fromJson(json, Info.class);
         List<SurfInfo> data = info.getResult().getData();
         model.addAttribute("data", data);
@@ -54,7 +58,7 @@ public class ApiController {
     }
     @GetMapping("/taean")
     public String taean(Model model) {
-        String json = restTemplate.getForObject(URL + TAEAN, String.class);
+        String json = restTemplate.getForObject(URL + TAEAN + serviceKey, String.class);
         Info info = gson.fromJson(json, Info.class);
         List<SurfInfo> data = info.getResult().getData();
         model.addAttribute("data", data);
