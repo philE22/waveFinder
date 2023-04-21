@@ -9,31 +9,29 @@
     <!--    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>-->
 
 </head>
+
 <body>
-<h1 class=" position-absolute start-50 " th:text="${data[0].name}">지역</h1>
+<div class="mx-auto font-weight-bold" style="width: 100px; font-size: 40px" th:text="${data[0].name}">지역</div>
 <br/>
 
-<div id="carouselExampleControls" class="carousel slide w-50 mx-auto" data-ride="carousel" data-interval="0">
-<!--    <ol class="carousel-indicators">-->
-<!--        <li data-target="#carouselExampleIndicators"-->
-<!--            th:each="info : ${data}" th:data-slide-to="${infoStat.index}"-->
-<!--            th:classappend="${infoStat.first} ? 'active' : _"></li>-->
-<!--    </ol>-->
+<div id="carouselExampleIndicators" class="carousel w-50 mx-auto" data-ride="carousel" data-interval="0">
+    <ol class="carousel-indicators">
+        <li class="" data-target="#carouselExampleIndicators" th:each="info : ${data}"
+            th:data-slide-to="${infoStat.index}" th:classappend="${infoStat.first} ? 'active' : _"></li>
+    </ol>
     <div class="carousel-inner">
         <div class="carousel-item" th:each="info : ${data}" th:classappend="${infoStat.first} ? 'active' : _">
             <img class="d-block w-100" th:src="${info.filePath}" th:alt="|${infoStat.index +1} slide|">
         </div>
     </div>
-    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="sr-only text-white bg-danger">< Previous</span>
     </a>
-    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="sr-only text-white bg-danger">Next ></span>
     </a>
-
 </div>
+
 </body>
 <script th:inline="javascript">
 
