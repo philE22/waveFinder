@@ -1,9 +1,10 @@
-package com.surfwave.waveFinder;
+package com.surfwave.waveFinder.controller;
 
 import com.google.gson.Gson;
+import com.surfwave.waveFinder.Info;
+import com.surfwave.waveFinder.SurfInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/surf")
 @RequiredArgsConstructor
-public class ApiController {
+public class KoreaSurfAPIController {
 
     RestTemplate restTemplate = new RestTemplate();
     Gson gson = new Gson();
@@ -36,7 +37,7 @@ public class ApiController {
         List<SurfInfo> data = info.getResult().getData();
         model.addAttribute("data", data);
 
-        return "/surf";
+        return "/surf-image";
     }
     @GetMapping("/busan")
     public String busan(Model model) {

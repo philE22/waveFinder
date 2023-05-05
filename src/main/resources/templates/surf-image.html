@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:each="info : ${data}">
+  <div th:text="|${info.day}일 ${info.hour}시|"></div>
+  <div th:text="${info.filePath}"></div>
+  <div th:text="${info.fileName}"></div>
+  <div th:text="${info.name}"></div>
+  <div th:text="${info.type}"></div>
+  <br>
+</div>
+</body>
+</html>
