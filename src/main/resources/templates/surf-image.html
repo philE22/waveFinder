@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div th:each="info : ${data}">
-  <div th:text="|${info.day}일 ${info.hour}시|"></div>
-  <div th:text="${info.filePath}"></div>
-  <div th:text="${info.fileName}"></div>
-  <div th:text="${info.name}"></div>
-  <div th:text="${info.type}"></div>
-  <br>
-</div>
+    <button class="show-image-btn"
+            th:each="info : ${data}"
+            th:data-image-src="${info.filePath}"
+            th:text="|${info.day}일 ${info.hour}시|">
+    </button>
+    <br>
+
+    <div id="image-container">
+        <img id="image" th:src="${data[0].filePath}" alt="이미지"
+             class="mx-auto d-block" style="width: 50vw;">
+    </div>
+
+    <script>
+    var buttons = document.getElementsByClassName("show-image-btn");
+    var image = document.getElementById("image");
+
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function() {
+            image.src = this.dataset.imageSrc;
+            document.getElementById("image-container").style.display = "block";
+        });
+    }
+</script>
+
 </body>
 </html>
