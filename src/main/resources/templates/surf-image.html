@@ -6,28 +6,68 @@
     <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <button class="show-image-btn"
+    <button class="show-image-btn all-btn"
             th:each="info : ${data}"
             th:data-image-src="${info.filePath}"
-            th:text="|${info.day}일 ${info.hour}시|">
+            th:text="|${info.day}일 ${info.hour}시|"
+            th:classappend="${infoStat.first} ? 'bg-danger' : _">
     </button>
     <br>
 
-    <div id="image-container">
+    <div id="image-container" class="row h-100 justify-content-center align-items-center">
+        <div class="col">
+        <button id="prev-btn" class="all-btn my-auto col-1">< 이전</button>
         <img id="image" th:src="${data[0].filePath}" alt="이미지"
-             class="mx-auto d-block" style="width: 50vw;">
+             class="img-fluid col-9">
+        <button id="next-btn" class="all-btn my-auto col-1">이후 ></button>
+        </div>
     </div>
 
     <script>
+    var currentIndex = 0;
+    var beforeIndex = 0;
     var buttons = document.getElementsByClassName("show-image-btn");
+    var prevButton = document.getElementById("prev-btn");
+    var nextButton = document.getElementById("next-btn");
     var image = document.getElementById("image");
+    var allButtons = document.getElementsByClassName("all-btn");
 
     for (var i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", function() {
+        (function(index) {
+            buttons[index].addEventListener("click", function() {
+            beforeIndex = currentIndex;
+            currentIndex = index;
             image.src = this.dataset.imageSrc;
-            document.getElementById("image-container").style.display = "block";
+            });
+        })(i);
+    }
+
+    prevButton.addEventListener("click", function() {
+        beforeIndex = currentIndex;
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = buttons.length - 1;
+        }
+        image.src = buttons[currentIndex].dataset.imageSrc;
+    });
+
+    nextButton.addEventListener("click", function() {
+        beforeIndex = currentIndex;
+        currentIndex++;
+        if (currentIndex > buttons.length - 1) {
+            currentIndex = 0;
+        }
+        image.src = buttons[currentIndex].dataset.imageSrc;
+    });
+
+    <!--  -->
+    for (var i = 0; i < allButtons.length; i++) {
+        allButtons[i].addEventListener("click", function() {
+            buttons[beforeIndex].classList.remove("bg-danger");
+            buttons[currentIndex].classList.add("bg-danger");
         });
     }
+
 </script>
 
 </body>
