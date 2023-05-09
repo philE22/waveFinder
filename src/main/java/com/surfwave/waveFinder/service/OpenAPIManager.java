@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class OpenAPIManager {
@@ -33,13 +36,19 @@ public class OpenAPIManager {
 
         for (Object o : list) {
             JSONObject data = (JSONObject) o;
-            String day = (String) data.get("day");
+
+            String date = (String) data.get("day");
+            int year = Integer.parseInt(date.substring(0, 4));
+            int month = Integer.parseInt(date.substring(4, 6));
+            int day = Integer.parseInt(date.substring(6));
+            String dayOfWeek = getDayOfWeek(year, month, day);
 
             SeaForecastInfo forecastInfo = SeaForecastInfo.builder()
                     .name((String) data.get("name"))
-                    .year(Integer.parseInt(day.substring(0, 4)))
-                    .month(Integer.parseInt(day.substring(4, 6)))
-                    .day(Integer.parseInt(day.substring(6)))
+                    .year(year)
+                    .month(month)
+                    .day(day)
+                    .dayOfWeek(dayOfWeek)
                     .hour(Integer.parseInt((String) data.get("hour")))
                     .filePath((String) data.get("filePath"))
                     .build();
@@ -47,5 +56,11 @@ public class OpenAPIManager {
         }
 
         return seaForecastInfoList;
+    }
+
+    private static String getDayOfWeek(int year, int month, int day) {
+        LocalDate localDate = LocalDate.of(year, month, day);
+        String dayOfWeek = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREA);
+        return dayOfWeek;
     }
 }

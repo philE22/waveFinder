@@ -13,5 +13,6 @@ public class SeaForecastInfo {
     private Integer month;
     private Integer day;
     private Integer hour;
+    private String dayOfWeek;
     private String filePath;
 }

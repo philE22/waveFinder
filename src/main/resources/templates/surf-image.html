@@ -1,74 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <button class="show-image-btn all-btn"
-            th:each="info : ${data}"
-            th:data-image-src="${info.filePath}"
-            th:text="|${info.day}일 ${info.hour}시|"
-            th:classappend="${infoStat.first} ? 'bg-danger' : _">
-    </button>
-    <br>
+    <head>
+        <meta charset="UTF-8">
+        <title>파도 예복</title>
+        <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
+    </head>
 
-    <div id="image-container" class="row h-100 justify-content-center align-items-center">
-        <div class="col">
-        <button id="prev-btn" class="all-btn my-auto col-1">< 이전</button>
-        <img id="image" th:src="${data[0].filePath}" alt="이미지"
-             class="img-fluid col-9">
-        <button id="next-btn" class="all-btn my-auto col-1">이후 ></button>
+    <body>
+        <a type="button" class="btn btn-outline-primary btn-lg" href="/">뒤로 가기</a>
+
+        <div id="image-container" class="row justify-content-center">
+            <button id="prev-btn" class="btn all-btn btn-outline-secondary my-auto col-1">이전</button>
+            <img id="image" th:src="${data[0].filePath}" alt="이미지"
+                 class="img-fluid col-9">
+            <button id="next-btn" class="btn all-btn btn-outline-secondary my-auto col-1">이후</button>
         </div>
-    </div>
 
-    <script>
-    var currentIndex = 0;
-    var beforeIndex = 0;
-    var buttons = document.getElementsByClassName("show-image-btn");
-    var prevButton = document.getElementById("prev-btn");
-    var nextButton = document.getElementById("next-btn");
-    var image = document.getElementById("image");
-    var allButtons = document.getElementsByClassName("all-btn");
+        <div class="row justify-content-center">
+            <button class="btn show-image-btn all-btn col-3 btn-lg btn-light m-1"
+                    th:each="info : ${data}"
+                    th:data-image-src="${info.filePath}"
+                    th:text="|(${info.day}일) ${info.dayOfWeek} ${info.hour}시|"
+                    th:classappend="${infoStat.first} ? 'bg-primary' : _">
+            </button>
+        </div>
+    </body>
 
-    for (var i = 0; i < buttons.length; i++) {
-        (function(index) {
-            buttons[index].addEventListener("click", function() {
-            beforeIndex = currentIndex;
-            currentIndex = index;
-            image.src = this.dataset.imageSrc;
-            });
-        })(i);
-    }
-
-    prevButton.addEventListener("click", function() {
-        beforeIndex = currentIndex;
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = buttons.length - 1;
-        }
-        image.src = buttons[currentIndex].dataset.imageSrc;
-    });
-
-    nextButton.addEventListener("click", function() {
-        beforeIndex = currentIndex;
-        currentIndex++;
-        if (currentIndex > buttons.length - 1) {
-            currentIndex = 0;
-        }
-        image.src = buttons[currentIndex].dataset.imageSrc;
-    });
-
-    <!--  -->
-    for (var i = 0; i < allButtons.length; i++) {
-        allButtons[i].addEventListener("click", function() {
-            buttons[beforeIndex].classList.remove("bg-danger");
-            buttons[currentIndex].classList.add("bg-danger");
-        });
-    }
-
-</script>
-
-</body>
+    <script th:src="@{/js/surf-image.js}"></script>
 </html>
