@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Wave Finder</title>
     <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<h1 class="m-3 mb-5 text-center">한국 해황예보도</h1>
-<ul class="list-group col-4 mx-auto">
-    <a class="list-group-item list-group-item-action text-center" href="/surf/sokcho">속초 - 양양</a>
-    <a class="list-group-item list-group-item-action text-center" href="/surf/busan">부산</a>
-    <a class="list-group-item list-group-item-action text-center" href="/surf/jeju">제주</a>
-    <a class="list-group-item list-group-item-action text-center" href="/surf/taean">태안</a>
-</ul>
+<body class="container">
+    <h1 class="m-3 mb-5 text-center">한국 해황예보도</h1>
 
-
+    <ul class="list-group col-sm-3 col mx-auto">
+        <a class="list-group-item list-group-item-action text-center" href="/surf/sokcho">속초 - 양양</a>
+        <a class="list-group-item list-group-item-action text-center" href="/surf/busan">부산</a>
+        <a class="list-group-item list-group-item-action text-center" href="/surf/jeju">제주</a>
+        <a class="list-group-item list-group-item-action text-center" href="/surf/taean">태안</a>
+    </ul>
 </body>
 </html>

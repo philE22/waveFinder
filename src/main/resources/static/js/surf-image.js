@@ -5,6 +5,7 @@ var prevButton = document.getElementById("prev-btn");
 var nextButton = document.getElementById("next-btn");
 var image = document.getElementById("image");
 var allButtons = document.getElementsByClassName("all-btn");
+var header = document.getElementById("header");
 
 for (var i = 0; i < buttons.length; i++) {
     (function(index) {
@@ -38,5 +39,6 @@ for (var i = 0; i < allButtons.length; i++) {
     allButtons[i].addEventListener("click", function() {
         buttons[beforeIndex].classList.remove("bg-primary");
         buttons[currentIndex].classList.add("bg-primary");
+        header.innerText = buttons[currentIndex].innerText;
     });
 }
