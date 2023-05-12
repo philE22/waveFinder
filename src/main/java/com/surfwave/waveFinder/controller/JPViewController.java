@@ -1,12 +1,13 @@
 package com.surfwave.waveFinder.controller;
 
-import com.surfwave.waveFinder.domain.api.JapanInfo;
+import com.surfwave.waveFinder.domain.api.JPWaveChart;
 import com.surfwave.waveFinder.service.JapanWebCrawler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,15 +15,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/surf/jp")
 @RequiredArgsConstructor
-public class JapanSurfAPIController {
+public class JPViewController {
 
     private final JapanWebCrawler crawler;
 
     @GetMapping
-    public String apiView(Model model) throws IOException {
+    public String apiView(@RequestParam("type") String type, Model model) throws IOException {
 
-        List<JapanInfo> data = crawler.crawling();
-
+        List<JPWaveChart> data = crawler.getJpWaveChart(type);
         model.addAttribute("data", data);
         return "surf-image";
     }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class SeaForecastInfo {
+public class KRWaveChart {
     private String name;
     private Integer year;
     private Integer month;
