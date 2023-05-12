@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/surf")
+@RequestMapping("/surf/ko")
 @RequiredArgsConstructor
 public class KoreaSurfAPIController {
     private final String SOKCHO = "SOKCHO";

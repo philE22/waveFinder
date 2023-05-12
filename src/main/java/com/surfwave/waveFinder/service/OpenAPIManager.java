@@ -50,7 +50,7 @@ public class OpenAPIManager {
                     .day(day)
                     .dayOfWeek(dayOfWeek)
                     .hour(Integer.parseInt((String) data.get("hour")))
-                    .filePath((String) data.get("filePath"))
+                    .imagePath((String) data.get("filePath"))
                     .build();
             seaForecastInfoList.add(forecastInfo);
         }

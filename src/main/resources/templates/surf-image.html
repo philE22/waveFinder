@@ -7,13 +7,13 @@
     </head>
 
     <body class="container">
-        <a type="button" class="btn btn-outline-primary" href="/">< 뒤로 가기</a>
+        <a type="button" class="btn btn-outline-primary mt-3" href="/">< 뒤로 가기</a>
 
         <h1 id="header" class="text-center"
             th:text="|(${data[0].day}일) ${data[0].dayOfWeek} ${data[0].hour}시|"></h1>
 
         <div id="contents-container" class="row justify-content-center">
-            <img id="image" th:src="${data[0].filePath}" alt="이미지" class="col-lg-8">
+            <img id="image" src="/Users/phile/Downloads/로고/spring.png" th:src="${data[0].imagePath}" alt="이미지" class="col-lg-8">
 
             <div id="button-container" class="row col-lg-4 justify-content-center align-self-center">
                 <div class="row mb-4">
@@ -23,7 +23,7 @@
                 <div class="row">
                     <button class="btn show-image-btn all-btn btn-outline-dark col-xl-6 col-lg-12 col-6"
                             th:each="info : ${data}"
-                            th:data-image-src="${info.filePath}"
+                            th:data-image-src="${info.imagePath}"
                             th:text="|(${info.day}일) ${info.dayOfWeek} ${info.hour}시|"
                             th:classappend="${infoStat.first} ? 'bg-primary' : _">
                     </button>

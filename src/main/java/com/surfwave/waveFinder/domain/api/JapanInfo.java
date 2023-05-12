@@ -2,15 +2,13 @@ package com.surfwave.waveFinder.domain.api;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Builder
-public class SeaForecastInfo {
-    private String name;
-    private Integer year;
-    private Integer month;
+public class JapanInfo {
+    private LocalDateTime localDateTime;
     private Integer day;
     private Integer hour;
     private String dayOfWeek;
