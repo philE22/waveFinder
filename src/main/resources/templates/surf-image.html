@@ -7,9 +7,25 @@
     </head>
 
     <body class="container">
-        <a type="button" class="btn btn-outline-primary mt-3" href="/">< 뒤로 가기</a>
 
-        <h1 id="header" class="text-center m-2"
+        <header class="row mt-3 mx-auto">
+            <a type="button" class="btn btn-outline-primary col-sm-1 col-4" href="/">< 뒤로 가기</a>
+
+            <div class="dropdown col-sm-1 col-4">
+                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    WSB 파도 웹캠
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/DZ59T" target="_blank">죽도 해변</a></li>
+                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/DRW5B" target="_blank">인구 해변</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/6N0Ay" target="_blank">만리포 해변</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <h1 id="title" class="text-center m-2"
             th:text="|[${data[0].day}일] ${data[0].dayOfWeek} ${data[0].hour}시|"></h1>
 
         <div id="contents-container" class="row justify-content-center">
@@ -32,4 +48,5 @@
         </div>
     </body>
     <script th:src="@{/js/surf-image.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </html>
