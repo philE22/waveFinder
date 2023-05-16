@@ -12,6 +12,8 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class JapanWebCrawler {
@@ -21,7 +23,7 @@ public class JapanWebCrawler {
     public List<JPWaveChart> getJpWaveChart(String type) throws IOException {
         Document document = Jsoup.connect(JP_WAVE_URL).get();
         Element main = document.getElementById("main");
-        String date = main.getElementsByClass("title").text();
+        String dateString = main.getElementsByClass("title").text();
 
         //src = "cwm/cwmjp_21.png?1212"
         String src = main.getElementsByTag("img").get(0).attr("src");
@@ -29,7 +31,7 @@ public class JapanWebCrawler {
 
         ArrayList<JPWaveChart> list = new ArrayList<>();
 
-        LocalDateTime startDate = parsingLocalDateTime(date);
+        LocalDateTime startDate = parsingLocalDateTime(dateString);
         for (int i = 0; i < 25; i++) {
             String imagePath = String.format(IMAGE_PATH_URL_FORMAT, type, String.format("%02d", i), postFix);
 
@@ -47,17 +49,29 @@ public class JapanWebCrawler {
         return list;
     }
 
-    private LocalDateTime parsingLocalDateTime(String date) {
-        //data = "日本 沿岸波浪予想（気象庁提供） 2023年5月12日(金)15時(JST) 更新"
-        int yearIndex = date.indexOf("年");
-        int monthIndex = date.indexOf("月");
-        int dayIndex = date.lastIndexOf("日");
-        int hourIndex = date.indexOf("時");
+    private LocalDateTime parsingLocalDateTime(String dateString) {
+        //dateString = "日本 沿岸波浪予想（気象庁提供） 2023年5月12日(金)15時(JST) 更新"
+        // 년도 추출
+        Pattern yearPattern = Pattern.compile("\\d{4}年");
+        Matcher yearMatcher = yearPattern.matcher(dateString);
+        // 월 추출
+        Pattern monthPattern = Pattern.compile("\\d{1,2}月");
+        Matcher monthMatcher = monthPattern.matcher(dateString);
+        // 일 추출
+        Pattern dayPattern = Pattern.compile("\\d{1,2}日");
+        Matcher dayMatcher = dayPattern.matcher(dateString);
+        // 시간 추출
+        Pattern hourPattern = Pattern.compile("\\d{1,2}時");
+        Matcher hourMatcher = hourPattern.matcher(dateString);
 
-        Integer year = Integer.valueOf(date.substring(yearIndex - 4, yearIndex));
-        Integer month = Integer.valueOf(date.substring(yearIndex + 1, monthIndex));
-        Integer day = Integer.valueOf(date.substring(monthIndex + 1, dayIndex));
-        Integer hour = Integer.valueOf(date.substring(dayIndex + 4, hourIndex));
+        //하나라도 파싱이 안되면 에러
+        if (!(yearMatcher.find() && monthMatcher.find() && dayMatcher.find() && hourMatcher.find())) {
+            throw new RuntimeException("날짜 데이터가 파싱되지 않았습니다.");
+        }
+        int year = Integer.parseInt(yearMatcher.group().replace("年", ""));
+        int month = Integer.parseInt(monthMatcher.group().replace("月", ""));
+        int day = Integer.parseInt(dayMatcher.group().replace("日", ""));
+        int hour = Integer.parseInt(hourMatcher.group().replace("時", ""));
 
         return LocalDateTime.of(year, month, day, hour, 0);
     }
