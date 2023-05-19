@@ -46,10 +46,11 @@
                     <button id="next-btn" class="all-btn btn btn-lg btn-outline-secondary col">이후 ></button>
                 </div>
                 <div class="row">
-                    <button class="btn show-image-btn all-btn btn-outline-dark col-xl-6 col-lg-12 col-6"
+                    <button class="btn show-image-btn all-btn btn-outline-dark col-xl-4 col-lg-6 col-4"
                             th:each="info : ${data}"
                             th:data-image-src="${info.imagePath}"
-                            th:text="|[${info.day}일] ${info.dayOfWeek} ${info.hour}시|"
+                            th:text="|${info.dayOfWeek} ${info.hour}시|"
+                            th:data-value="${info.day}"
                             th:classappend="${infoStat.first} ? 'bg-primary' : _">
                     </button>
                 </div>

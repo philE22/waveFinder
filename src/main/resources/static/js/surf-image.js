@@ -39,6 +39,6 @@ for (var i = 0; i < allButtons.length; i++) {
     allButtons[i].addEventListener("click", function() {
         buttons[beforeIndex].classList.remove("bg-primary");
         buttons[currentIndex].classList.add("bg-primary");
-        title.innerText = buttons[currentIndex].innerText;
+        title.innerText = "[" + buttons[currentIndex].dataset.value + "일] " + buttons[currentIndex].innerText;
     });
 }

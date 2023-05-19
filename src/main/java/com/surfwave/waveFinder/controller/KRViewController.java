@@ -23,6 +23,6 @@ public class KRViewController {
         List<KRWaveChart> data = apiManager.getKRWaveChartList(type.toUpperCase());
         model.addAttribute("data", data);
 
-        return "/surf-image";
+        return "surf-image";
     }
 }
