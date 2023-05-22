@@ -19,7 +19,7 @@ repositories {
 }
 
 //-plain.jar 파일 생성안하기 위한 설정
-jar {
+tasks.named("jar") {
 	enabled = false
 }
 
