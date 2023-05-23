@@ -1,13 +1,13 @@
-package com.surfwave.waveFinder.service;
+package com.surfwave.waveFinder.domain.waveChart.service;
 
-import com.surfwave.waveFinder.domain.api.KRWaveChart;
+import com.surfwave.waveFinder.domain.waveChart.entity.KRChart;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class OpenAPIManager {
     private final RestTemplate restTemplate;
@@ -24,7 +24,7 @@ public class OpenAPIManager {
     @Value("${serviceKey}")
     private String serviceKey;
 
-    public List<KRWaveChart> getKRWaveChartList(String type) throws ParseException {
+    public List<KRChart> getKRWaveChartList(String type) throws ParseException {
         JSONParser jsonParser = new JSONParser();
 
         String json = restTemplate.getForObject(String.format(KR_API_URL_FORMAT, type, serviceKey), String.class);
@@ -33,7 +33,7 @@ public class OpenAPIManager {
         JSONObject result = (JSONObject) parsing.get("result");
         JSONArray jsonArray = (JSONArray) result.get("data");
 
-        ArrayList<KRWaveChart> KRWaveChartList = new ArrayList<>();
+        ArrayList<KRChart> KRWaveChartList = new ArrayList<>();
 
         for (Object o : jsonArray) {
             JSONObject jsonObject = (JSONObject) o;
@@ -43,13 +43,13 @@ public class OpenAPIManager {
         return KRWaveChartList;
     }
 
-    private KRWaveChart parsingKRWaveChart(JSONObject jsonObject) {
+    private KRChart parsingKRWaveChart(JSONObject jsonObject) {
         String name = (String) jsonObject.get("name");
         String imagePath = (String) jsonObject.get("filePath");
 
         LocalDateTime localDateTime = parsingLocalDateTime(jsonObject);
 
-        return KRWaveChart.builder()
+        return KRChart.builder()
                 .name(name)
                 .year(localDateTime.getYear())
                 .month(localDateTime.getMonthValue())

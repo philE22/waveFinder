@@ -1,4 +1,4 @@
-package com.surfwave.waveFinder.config;
+package com.surfwave.waveFinder.global.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

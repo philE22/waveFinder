@@ -1,13 +1,14 @@
-package com.surfwave.waveFinder.service;
+package com.surfwave.waveFinder.domain.waveChart.service;
 
-import com.surfwave.waveFinder.domain.api.JPWaveChart;
+import com.surfwave.waveFinder.domain.waveChart.entity.JPChart;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,28 +16,35 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
-public class JapanWebCrawler {
+@Service
+public class JPWebCrawler {
     private final String JP_WAVE_URL = "https://www.imocwx.com/cwm.php";
     private final String IMAGE_PATH_URL_FORMAT = "https://www.imocwx.com/cwm/cwm%s_%s%s";
 
-    public List<JPWaveChart> getJpWaveChart(String type) throws IOException {
-        Document document = Jsoup.connect(JP_WAVE_URL).get();
+    //TODO 예외처리 하기
+    public List<JPChart> getJpWaveChart(String type) {
+        Document document = null;
+        try {
+            document = Jsoup.connect(JP_WAVE_URL).get();
+        } catch (IOException e) {
+            throw new RuntimeException("JP 크롤링이 되지 않았습니다.");
+        }
         Element main = document.getElementById("main");
         String dateString = main.getElementsByClass("title").text();
 
-        //src = "cwm/cwmjp_21.png?1212"
-        String src = main.getElementsByTag("img").get(0).attr("src");
-        String postFix = src.substring(src.indexOf(".png"));
+        //src = "https://www.imocwx.com/cwm/cwmjp_00.png?2206"
+        String absImgPath = main.getElementsByTag("img").get(0).attr("abs:src");
 
-        ArrayList<JPWaveChart> list = new ArrayList<>();
+        ArrayList<JPChart> list = new ArrayList<>();
 
         LocalDateTime startDate = parsingLocalDateTime(dateString);
         for (int i = 0; i < 25; i++) {
-            String imagePath = String.format(IMAGE_PATH_URL_FORMAT, type, String.format("%02d", i), postFix);
-
-            list.add(JPWaveChart.builder()
+            String imagePath = absImgPath.replace("00", String.format("%02d", i));
+            list.add(JPChart.builder()
                     .imagePath(imagePath)
+                    .fullDateTime(startDate.format(DateTimeFormatter.ofPattern("yyyyMMddHH")))
+                    .year(startDate.getYear())
+                    .month(startDate.getMonthValue())
                     .day(startDate.getDayOfMonth())
                     .hour(startDate.getHour())
                     .dayOfWeek(startDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREA))
