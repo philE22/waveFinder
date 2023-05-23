@@ -20,10 +20,10 @@ public class JPViewController {
     private final JPWebCrawler crawler;
 
     @GetMapping
-    public String apiView(@RequestParam("type") String type, Model model) {
+    public String apiView(@RequestParam String region, Model model) {
 
-        List<JPChartDto> data = crawler.getJpWaveChart(type);
-        model.addAttribute("data", data);
+        List<JPChartDto> chartDtos = crawler.getJpWaveChart(region);
+        model.addAttribute("chartDtos", chartDtos);
         return "surf-image";
     }
 }

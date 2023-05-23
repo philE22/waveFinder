@@ -19,9 +19,9 @@ public class KRViewController {
     private final KROpenAPIManager apiManager;
 
     @GetMapping
-    public String apiView(@RequestParam String type, Model model) throws ParseException {
-        List<KRChartDto> data = apiManager.getKRWaveChartList(type.toUpperCase());
-        model.addAttribute("data", data);
+    public String apiView(@RequestParam String region, Model model) throws ParseException {
+        List<KRChartDto> chartDtos = apiManager.getKRWaveChartList(region.toUpperCase());
+        model.addAttribute("chartDtos", chartDtos);
 
         return "surf-image";
     }
