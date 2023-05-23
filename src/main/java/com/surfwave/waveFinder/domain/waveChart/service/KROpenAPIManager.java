@@ -1,6 +1,6 @@
 package com.surfwave.waveFinder.domain.waveChart.service;
 
-import com.surfwave.waveFinder.domain.waveChart.entity.KRChart;
+import com.surfwave.waveFinder.domain.waveChart.dto.KRChartDto;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,20 +11,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
-public class OpenAPIManager {
+public class KROpenAPIManager {
     private final RestTemplate restTemplate;
     private final String KR_API_URL_FORMAT = "http://www.khoa.go.kr/api/oceangrid/preOcean/search.do?ResultType=json&type=%s%s";
     @Value("${serviceKey}")
     private String serviceKey;
 
-    public List<KRChart> getKRWaveChartList(String type) throws ParseException {
+    public List<KRChartDto> getKRWaveChartList(String type) throws ParseException {
         JSONParser jsonParser = new JSONParser();
 
         String json = restTemplate.getForObject(String.format(KR_API_URL_FORMAT, type, serviceKey), String.class);
@@ -33,7 +31,7 @@ public class OpenAPIManager {
         JSONObject result = (JSONObject) parsing.get("result");
         JSONArray jsonArray = (JSONArray) result.get("data");
 
-        ArrayList<KRChart> KRWaveChartList = new ArrayList<>();
+        ArrayList<KRChartDto> KRWaveChartList = new ArrayList<>();
 
         for (Object o : jsonArray) {
             JSONObject jsonObject = (JSONObject) o;
@@ -43,21 +41,13 @@ public class OpenAPIManager {
         return KRWaveChartList;
     }
 
-    private KRChart parsingKRWaveChart(JSONObject jsonObject) {
-        String name = (String) jsonObject.get("name");
+    private KRChartDto parsingKRWaveChart(JSONObject jsonObject) {
+        String region = (String) jsonObject.get("name");
         String imagePath = (String) jsonObject.get("filePath");
 
         LocalDateTime localDateTime = parsingLocalDateTime(jsonObject);
 
-        return KRChart.builder()
-                .name(name)
-                .year(localDateTime.getYear())
-                .month(localDateTime.getMonthValue())
-                .day(localDateTime.getDayOfMonth())
-                .hour(localDateTime.getHour())
-                .dayOfWeek(localDateTime.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREA))
-                .imagePath(imagePath)
-                .build();
+        return new KRChartDto(region, imagePath, localDateTime);
     }
 
     private LocalDateTime parsingLocalDateTime(JSONObject jsonObject) {

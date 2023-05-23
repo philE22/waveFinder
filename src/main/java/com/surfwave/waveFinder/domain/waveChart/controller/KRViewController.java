@@ -1,7 +1,7 @@
 package com.surfwave.waveFinder.domain.waveChart.controller;
 
-import com.surfwave.waveFinder.domain.waveChart.entity.KRChart;
-import com.surfwave.waveFinder.domain.waveChart.service.OpenAPIManager;
+import com.surfwave.waveFinder.domain.waveChart.dto.KRChartDto;
+import com.surfwave.waveFinder.domain.waveChart.service.KROpenAPIManager;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,11 @@ import java.util.List;
 @RequestMapping("/surf/ko")
 @RequiredArgsConstructor
 public class KRViewController {
-    private final OpenAPIManager apiManager;
+    private final KROpenAPIManager apiManager;
 
     @GetMapping
     public String apiView(@RequestParam String type, Model model) throws ParseException {
-        List<KRChart> data = apiManager.getKRWaveChartList(type.toUpperCase());
+        List<KRChartDto> data = apiManager.getKRWaveChartList(type.toUpperCase());
         model.addAttribute("data", data);
 
         return "surf-image";

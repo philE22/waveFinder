@@ -1,6 +1,7 @@
 package com.surfwave.waveFinder.domain.waveChart.service;
 
-import com.surfwave.waveFinder.domain.waveChart.entity.JPChart;
+import com.surfwave.waveFinder.domain.waveChart.dto.JPChartDto;
+import com.surfwave.waveFinder.domain.waveChart.entity.JPChartImage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,21 +9,17 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class JPWebCrawler {
     private final String JP_WAVE_URL = "https://www.imocwx.com/cwm.php";
-    private final String IMAGE_PATH_URL_FORMAT = "https://www.imocwx.com/cwm/cwm%s_%s%s";
 
     //TODO 예외처리 하기
-    public List<JPChart> getJpWaveChart(String type) {
+    public List<JPChartDto> getJpWaveChart(String type) {
         Document document = null;
         try {
             document = Jsoup.connect(JP_WAVE_URL).get();
@@ -31,25 +28,14 @@ public class JPWebCrawler {
         }
         Element main = document.getElementById("main");
         String dateString = main.getElementsByClass("title").text();
-
+        LocalDateTime startDate = parsingLocalDateTime(dateString);
         //src = "https://www.imocwx.com/cwm/cwmjp_00.png?2206"
         String absImgPath = main.getElementsByTag("img").get(0).attr("abs:src");
 
-        ArrayList<JPChart> list = new ArrayList<>();
-
-        LocalDateTime startDate = parsingLocalDateTime(dateString);
+        ArrayList<JPChartDto> list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            String imagePath = absImgPath.replace("00", String.format("%02d", i));
-            list.add(JPChart.builder()
-                    .imagePath(imagePath)
-                    .fullDateTime(startDate.format(DateTimeFormatter.ofPattern("yyyyMMddHH")))
-                    .year(startDate.getYear())
-                    .month(startDate.getMonthValue())
-                    .day(startDate.getDayOfMonth())
-                    .hour(startDate.getHour())
-                    .dayOfWeek(startDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREA))
-                    .build()
-            );
+            String imagePath = absImgPath.replaceFirst("00", String.format("%02d", i));
+            list.add(new JPChartDto(type, imagePath, startDate));
 
             startDate = startDate.plusHours(3L);
         }

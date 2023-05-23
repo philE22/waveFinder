@@ -1,6 +1,7 @@
 package com.surfwave.waveFinder.domain.waveChart.controller;
 
-import com.surfwave.waveFinder.domain.waveChart.entity.JPChart;
+import com.surfwave.waveFinder.domain.waveChart.dto.JPChartDto;
+import com.surfwave.waveFinder.domain.waveChart.entity.JPChartImage;
 import com.surfwave.waveFinder.domain.waveChart.service.JPWebCrawler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class JPViewController {
     @GetMapping
     public String apiView(@RequestParam("type") String type, Model model) {
 
-        List<JPChart> data = crawler.getJpWaveChart(type);
+        List<JPChartDto> data = crawler.getJpWaveChart(type);
         model.addAttribute("data", data);
         return "surf-image";
     }
