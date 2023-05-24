@@ -22,12 +22,17 @@ public class KROpenAPIManager {
     @Value("${serviceKey}")
     private String serviceKey;
 
-    public List<KRChartDto> getKRWaveChartList(String type) throws ParseException {
-        JSONParser jsonParser = new JSONParser();
-
+    public List<KRChartDto> getKRWaveChartList(String type) {
         String json = restTemplate.getForObject(String.format(KR_API_URL_FORMAT, type, serviceKey), String.class);
 
-        JSONObject parsing = (JSONObject) jsonParser.parse(json);
+        JSONParser jsonParser = new JSONParser();
+        JSONObject parsing = null;
+        try {
+            parsing = (JSONObject) jsonParser.parse(json);
+        } catch (ParseException e) {
+            throw new RuntimeException("json 파싱에 실패했습니다.");
+        }
+
         JSONObject result = (JSONObject) parsing.get("result");
         JSONArray jsonArray = (JSONArray) result.get("data");
 

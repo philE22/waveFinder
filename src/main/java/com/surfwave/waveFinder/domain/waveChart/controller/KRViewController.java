@@ -19,7 +19,7 @@ public class KRViewController {
     private final KROpenAPIManager apiManager;
 
     @GetMapping
-    public String apiView(@RequestParam String region, Model model) throws ParseException {
+    public String apiView(@RequestParam String region, Model model) {
         List<KRChartDto> chartDtos = apiManager.getKRWaveChartList(region.toUpperCase());
         model.addAttribute("chartDtos", chartDtos);
 
