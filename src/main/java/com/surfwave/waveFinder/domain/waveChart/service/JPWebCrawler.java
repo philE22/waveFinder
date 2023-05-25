@@ -1,7 +1,6 @@
 package com.surfwave.waveFinder.domain.waveChart.service;
 
 import com.surfwave.waveFinder.domain.waveChart.dto.JPChartDto;
-import com.surfwave.waveFinder.domain.waveChart.entity.JPChartImage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,9 +16,11 @@ import java.util.regex.Pattern;
 @Service
 public class JPWebCrawler {
     private final String JP_WAVE_URL = "https://www.imocwx.com/cwm.php";
+    private final String IMAGE_PATH_URL_FORMAT = "https://www.imocwx.com/cwm/cwm%s_%s%s";
+
 
     //TODO 예외처리 하기
-    public List<JPChartDto> getJpWaveChart(String type) {
+    public List<JPChartDto> getJpWaveChart(String region) {
         Document document = null;
         try {
             document = Jsoup.connect(JP_WAVE_URL).get();
@@ -29,13 +30,15 @@ public class JPWebCrawler {
         Element main = document.getElementById("main");
         String dateString = main.getElementsByClass("title").text();
         LocalDateTime startDate = parsingLocalDateTime(dateString);
-        //src = "https://www.imocwx.com/cwm/cwmjp_00.png?2206"
-        String absImgPath = main.getElementsByTag("img").get(0).attr("abs:src");
+
+        //src = "cwm/cwmjp_21.png?1212"
+        String src = main.getElementsByTag("img").get(0).attr("src");
+        String postFix = src.substring(src.indexOf(".png"));
 
         ArrayList<JPChartDto> list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            String imagePath = absImgPath.replaceFirst("00", String.format("%02d", i));
-            list.add(new JPChartDto(type, imagePath, startDate));
+            String imagePath = String.format(IMAGE_PATH_URL_FORMAT, region, String.format("%02d", i), postFix);
+            list.add(new JPChartDto(region, imagePath, startDate));
 
             startDate = startDate.plusHours(3L);
         }

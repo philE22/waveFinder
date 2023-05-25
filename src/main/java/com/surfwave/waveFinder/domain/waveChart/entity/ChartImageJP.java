@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Table(name = "chart_image_jp")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JPChartImage extends Auditable {
+public class ChartImageJP extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +25,7 @@ public class JPChartImage extends Auditable {
     private LocalDateTime imageDate;
 
     @Builder
-    public JPChartImage(String region, String savedPath, LocalDateTime imageDate) {
+    public ChartImageJP(String region, String savedPath, LocalDateTime imageDate) {
         this.region = region;
         this.savedPath = savedPath;
         this.imageDate = imageDate;

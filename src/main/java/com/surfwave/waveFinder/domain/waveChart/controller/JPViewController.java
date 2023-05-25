@@ -1,7 +1,6 @@
 package com.surfwave.waveFinder.domain.waveChart.controller;
 
 import com.surfwave.waveFinder.domain.waveChart.dto.JPChartDto;
-import com.surfwave.waveFinder.domain.waveChart.entity.JPChartImage;
 import com.surfwave.waveFinder.domain.waveChart.service.JPWebCrawler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

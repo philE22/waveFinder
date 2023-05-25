@@ -1,5 +1,6 @@
 package com.surfwave.waveFinder.domain.waveChart.dto;
 
+import com.surfwave.waveFinder.domain.waveChart.entity.ChartImageJP;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,6 @@ import java.util.Locale;
 @Getter
 public class JPChartDto {
 
-    private String region;
     private Integer year;
     private Integer month;
     private Integer day;
@@ -18,6 +18,9 @@ public class JPChartDto {
     private String dayOfWeek;
     //"yyyyMMddHH" 형태의 문자열
     private String dateTimeString;
+
+
+    private String region;
     private String imagePath;
     private LocalDateTime imageDate;
 
@@ -33,5 +36,13 @@ public class JPChartDto {
         this.hour = imageDate.getHour();
         this.dayOfWeek = imageDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREA);
         this.dateTimeString = imageDate.format(DateTimeFormatter.ofPattern("yyyyMMddHH"));
+    }
+
+    public ChartImageJP toEntity(String savePath) {
+        return  ChartImageJP.builder()
+                .imageDate(this.imageDate)
+                .savedPath(savePath)
+                .region(this.region)
+                .build();
     }
 }
