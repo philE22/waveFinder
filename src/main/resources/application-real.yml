@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: security, real-db
+    include: security,real-db
   jpa:
     properties:
       hibernate:
