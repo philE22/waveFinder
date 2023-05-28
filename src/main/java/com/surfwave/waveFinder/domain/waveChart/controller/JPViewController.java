@@ -23,6 +23,6 @@ public class JPViewController {
 
         List<JPChartDto> chartDtos = crawler.getJpWaveChart(region);
         model.addAttribute("chartDtos", chartDtos);
-        return "surf-image";
+        return "surf-image-range";
     }
 }
