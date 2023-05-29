@@ -9,6 +9,13 @@
                 touch-action: manipulation;
                 -ms-touch-action: manipulation;
             }
+            #dateDisplay {
+                position: relative;
+                width: 70px;
+                display: block;
+                text-align: center;
+                left: -27px;
+            }
         </style>
     </head>
 
@@ -44,32 +51,43 @@
                     <button id="prev-btn" class="all-btn btn btn-lg btn-outline-secondary col">< 이전</button>
                     <button id="next-btn" class="all-btn btn btn-lg btn-outline-secondary col">이후 ></button>
                 </div>
-                <div>
-                    <input type="range" class="form-range" min="0" max="24" value="0" id="imageRange">
+                <div class="range">
+                    <input type="range" class="form-range" min="0" th:max="${#lists.size(chartDtos)-1}" value="0" id="imageRange">
+                    <div id="dateDisplay" th:text="|${chartDtos[0].day}일 ${chartDtos[0].hour}시|"></div>
                 </div>
             </div>
         </div>
     </body>
 
     <script th:inline="javascript">
+        const prevButton = document.getElementById("prev-btn");
+        const nextButton = document.getElementById("next-btn");
         const rangeInput = document.getElementById("imageRange");
         const image = document.getElementById("image");
         const title = document.getElementById("title");
         var list = [[${chartDtos}]];
         var chart = list[0];
 
+        const dateText = document.getElementById("dateDisplay");
+        var inputWidth = rangeInput.offsetWidth;
+        var textWidth = dateText.offsetWidth;
+        var splitWidth = inputWidth / list.length;
+        var startLeft = -27;
+
         rangeInput.addEventListener("input", function() {
             const inputValue = this.value;
             chart = list[inputValue];
-
             image.src = chart.imagePath;
-            title.innerText = `${chart.day}일 ${chart.dayOfWeek} ${chart.hour}시`;
+            title.innerText = `[${chart.day}일] ${chart.dayOfWeek} ${chart.hour}시`;
+
+            //text 위치와 내용 조정
+            var position = startLeft + splitWidth * inputValue;
+            dateText.style.left = `${position}px`;
+            dateText.innerText = `${chart.day}일 ${chart.hour}시`;
         });
 
-        var prevButton = document.getElementById("prev-btn");
-        var nextButton = document.getElementById("next-btn");
-
         prevButton.addEventListener("click", function() {
+            //input에 맞는 이미지 보여주는 로직
             value = rangeInput.value;
             value--;
             if (value < 0) {
@@ -79,9 +97,15 @@
             image.src = chart.imagePath;
             title.innerText = `[${chart.day}일] ${chart.dayOfWeek} ${chart.hour}시`;
             rangeInput.value = value;
+
+            //date text 위치와 내용 조정 로직
+            var position = startLeft + splitWidth * value;
+            dateText.style.left = `${position}px`;
+            dateText.innerText = `${chart.day}일 ${chart.hour}시`;
         });
 
         nextButton.addEventListener("click", function() {
+            //input에 맞는 이미지 보여주는 로직
             value = rangeInput.value;
             value++;
             if (value > list.length - 1) {
@@ -91,8 +115,24 @@
             image.src = chart.imagePath;
             title.innerText = `[${chart.day}일] ${chart.dayOfWeek} ${chart.hour}시`;
             rangeInput.value = value;
+
+            //text 위치와 내용 조정
+            var position = startLeft + splitWidth * value;
+            dateText.style.left = `${position}px`;
+            dateText.innerText = `${chart.day}일 ${chart.hour}시`;
         });
+
+        window.addEventListener('resize', function() {
+            // 화면 크기 변화를 감지했을 때 넓이를 측정하기 위해 존재
+            inputWidth = rangeInput.offsetWidth;
+            textWidth = dateText.offsetWidth;
+            splitWidth = inputWidth / list.length;
+
+            // 변화되었을때 알맞은 위치로 조정
+            value = rangeInput.value;
+            var position = startLeft + splitWidth * value;
+            dateText.style.left = `${position}px`;
+          });
     </script>
-<!--    <script th:src="@{/js/surf-image.js}"></script>-->
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </html>

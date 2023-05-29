@@ -23,6 +23,6 @@ public class KRViewController {
         List<KRChartDto> chartDtos = apiManager.getKRWaveChartList(region.toUpperCase());
         model.addAttribute("chartDtos", chartDtos);
 
-        return "surf-image";
+        return "surf-image-range";
     }
 }
