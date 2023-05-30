@@ -41,7 +41,7 @@
         </header>
 
         <h1 id="title" class="text-center m-2"
-            th:text="|[${chartDtos[0].day}일] ${chartDtos[0].dayOfWeek} ${chartDtos[0].hour}시|"></h1>
+            th:text="|[${chartDtos[0].day}일] ${chartDtos[0].dayOfWeek}요일 ${chartDtos[0].hour}시|"></h1>
 
         <div id="contents-container" class="row justify-content-center">
             <img id="image" th:src="${chartDtos[0].imagePath}" alt="이미지" class="col-lg-8">
@@ -54,7 +54,7 @@
                 <div class="range">
                     <input type="range" class="form-range" min="0" th:max="${#lists.size(chartDtos)-1}" value="0" id="imageRange">
                     <div id="dateDisplay">
-                        <p th:text="|${chartDtos[0].day}일 ${chartDtos[0].hour}시|"></p>
+                        <p th:text="|[${chartDtos[0].dayOfWeek}] ${chartDtos[0].hour}시|"></p>
                     </div>
                 </div>
             </div>
@@ -80,12 +80,12 @@
             const inputValue = this.value;
             chart = list[inputValue];
             image.src = chart.imagePath;
-            title.innerText = `[${chart.day}일] ${chart.dayOfWeek} ${chart.hour}시`;
+            title.innerText = `[${chart.day}일] ${chart.dayOfWeek}요일 ${chart.hour}시`;
 
             //text 위치와 내용 조정
             var position = startLeft + splitWidth * inputValue;
             dateText.style.left = `${position}px`;
-            dateText.innerText = `${chart.day}일 ${chart.hour}시`;
+            dateText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
         });
 
         prevButton.addEventListener("click", function() {
@@ -97,13 +97,13 @@
             }
             chart = list[value];
             image.src = chart.imagePath;
-            title.innerText = `[${chart.day}일] ${chart.dayOfWeek} ${chart.hour}시`;
+            title.innerText = `[${chart.day}일] ${chart.dayOfWeek}요일 ${chart.hour}시`;
             rangeInput.value = value;
 
             //date text 위치와 내용 조정 로직
             var position = startLeft + splitWidth * value;
             dateText.style.left = `${position}px`;
-            dateText.innerText = `${chart.day}일 ${chart.hour}시`;
+            dateText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
         });
 
         nextButton.addEventListener("click", function() {
@@ -115,13 +115,13 @@
             }
             chart = list[value];
             image.src = chart.imagePath;
-            title.innerText = `[${chart.day}일] ${chart.dayOfWeek} ${chart.hour}시`;
+            title.innerText = `[${chart.day}일] ${chart.dayOfWeek}요일 ${chart.hour}시`;
             rangeInput.value = value;
 
             //text 위치와 내용 조정
             var position = startLeft + splitWidth * value;
             dateText.style.left = `${position}px`;
-            dateText.innerText = `${chart.day}일 ${chart.hour}시`;
+            dateText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
         });
 
         window.addEventListener('resize', function() {

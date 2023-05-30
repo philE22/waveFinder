@@ -34,7 +34,7 @@ public class JPChartDto {
         this.month = imageDate.getMonthValue();
         this.day = imageDate.getDayOfMonth();
         this.hour = imageDate.getHour();
-        this.dayOfWeek = imageDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREA);
+        this.dayOfWeek = imageDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREA);
         this.dateTimeString = imageDate.format(DateTimeFormatter.ofPattern("yyyyMMddHH"));
     }
 
