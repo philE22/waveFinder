@@ -3,24 +3,16 @@
     <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" charset="UTF-8">
         <title>파도 예보</title>
-        <link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <style>
             html, body {
                 touch-action: manipulation;
                 -ms-touch-action: manipulation;
             }
-            #dateDisplay {
-                position: relative;
-                width: 70px;
-                display: block;
-                text-align: center;
-                left: -20px;
-            }
         </style>
     </head>
 
     <body class="container">
-
         <header class="row mt-3 mx-auto">
             <a type="button" class="btn btn-outline-primary col-xxl-1 col-md-2 col-sm-3 col-4" href="/">< 뒤로 가기</a>
 
@@ -40,8 +32,13 @@
             </div>
         </header>
 
-        <h1 id="title" class="text-center m-2"
-            th:text="|[${chartDtos[0].day}일] ${chartDtos[0].dayOfWeek}요일 ${chartDtos[0].hour}시|"></h1>
+        <div class="title-wrap row pt-4">
+            <h1 id="title-left" class="col-3"></h1>
+            <h1 id="title-center" class="col-6 text-center"
+                th:text="|${chartDtos[0].dayOfWeek}요일 ${chartDtos[0].hour}시|">일요일 15시</h1>
+            <h1 id="title-right" class="col-3 text-center fs-2 align-self-end"
+                th:text="|(${chartDtos[0].day}일)|">(28일)</h1>
+        </div>
 
         <div id="contents-container" class="row justify-content-center">
             <img id="image" th:src="${chartDtos[0].imagePath}" alt="이미지" class="col-lg-8">
@@ -53,88 +50,91 @@
                 </div>
                 <div class="range">
                     <input type="range" class="form-range" min="0" th:max="${#lists.size(chartDtos)-1}" value="0" id="imageRange">
-                    <div id="dateDisplay">
+                    <div id="rangeInputText" class="position-relative">
                         <p th:text="|[${chartDtos[0].dayOfWeek}] ${chartDtos[0].hour}시|"></p>
                     </div>
                 </div>
             </div>
         </div>
+        <script th:inline="javascript">
+            const prevButton = document.getElementById("prev-btn");
+            const nextButton = document.getElementById("next-btn");
+            const rangeInput = document.getElementById("imageRange");
+            const image = document.getElementById("image");
+            const titleCenter = document.getElementById("title-center");
+            const titleRight = document.getElementById("title-right");
+            var list = [[${chartDtos}]];
+            var chart = list[0];
+
+            const rangeInputText = document.getElementById("rangeInputText");
+            //넓이 처음에 초기화하고 inputText에 left값 넣어줌
+            var inputWidth = rangeInput.offsetWidth;
+            var textWidth = rangeInputText.offsetWidth;
+            var splitWidth = inputWidth / (list.length +1);
+            const startLeft = -20;
+            rangeInputText.style.left = `${startLeft}px`;
+
+            function changeImageAndTitleText (chart) {
+                image.src = chart.imagePath;
+                titleCenter.innerText = `${chart.dayOfWeek}요일 ${chart.hour}시`;
+                titleRight.innerText = `(${chart.day}일)`;
+            }
+
+            function changeInputTextAndPosition (chart, value) {
+                var position = startLeft + splitWidth * value;
+                rangeInputText.style.left = `${position}px`;
+                rangeInputText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
+            }
+
+            rangeInput.addEventListener("input", function() {
+                const inputValue = this.value;
+                chart = list[inputValue];
+                changeImageAndTitleText(chart);
+
+                //text 위치와 내용 조정
+                changeInputTextAndPosition(chart, inputValue);
+            });
+
+            prevButton.addEventListener("click", function() {
+                //input에 맞는 이미지 보여주는 로직
+                value = rangeInput.value;
+                value--;
+                if (value < 0) {
+                    value = list.length - 1;
+                }
+                chart = list[value];
+                changeImageAndTitleText(chart);
+
+                rangeInput.value = value;
+                changeInputTextAndPosition(chart, value);
+            });
+
+            nextButton.addEventListener("click", function() {
+                //input에 맞는 이미지 보여주는 로직
+                value = rangeInput.value;
+                value++;
+                if (value > list.length - 1) {
+                    value = 0;
+                }
+                chart = list[value];
+                changeImageAndTitleText(chart);
+
+                rangeInput.value = value;
+                changeInputTextAndPosition(chart, value);
+            });
+
+            window.addEventListener('resize', function() {
+                // 화면 크기 변화를 감지했을 때 넓이를 측정하기 위해 존재
+                inputWidth = rangeInput.offsetWidth;
+                textWidth = rangeInputText.offsetWidth;
+                splitWidth = inputWidth / (list.length + 1);
+
+                //변화되었을때 input text를 알맞은 위치로 조정
+                value = rangeInput.value;
+                var position = startLeft + splitWidth * value;
+                rangeInputText.style.left = `${position}px`;
+              });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     </body>
-
-    <script th:inline="javascript">
-        const prevButton = document.getElementById("prev-btn");
-        const nextButton = document.getElementById("next-btn");
-        const rangeInput = document.getElementById("imageRange");
-        const image = document.getElementById("image");
-        const title = document.getElementById("title");
-        var list = [[${chartDtos}]];
-        var chart = list[0];
-
-        const dateText = document.getElementById("dateDisplay");
-        var inputWidth = rangeInput.offsetWidth;
-        var textWidth = dateText.offsetWidth;
-        var splitWidth = inputWidth / (list.length + 1);
-        var startLeft = -20;
-
-        rangeInput.addEventListener("input", function() {
-            const inputValue = this.value;
-            chart = list[inputValue];
-            image.src = chart.imagePath;
-            title.innerText = `[${chart.day}일] ${chart.dayOfWeek}요일 ${chart.hour}시`;
-
-            //text 위치와 내용 조정
-            var position = startLeft + splitWidth * inputValue;
-            dateText.style.left = `${position}px`;
-            dateText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
-        });
-
-        prevButton.addEventListener("click", function() {
-            //input에 맞는 이미지 보여주는 로직
-            value = rangeInput.value;
-            value--;
-            if (value < 0) {
-                value = list.length - 1;
-            }
-            chart = list[value];
-            image.src = chart.imagePath;
-            title.innerText = `[${chart.day}일] ${chart.dayOfWeek}요일 ${chart.hour}시`;
-            rangeInput.value = value;
-
-            //date text 위치와 내용 조정 로직
-            var position = startLeft + splitWidth * value;
-            dateText.style.left = `${position}px`;
-            dateText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
-        });
-
-        nextButton.addEventListener("click", function() {
-            //input에 맞는 이미지 보여주는 로직
-            value = rangeInput.value;
-            value++;
-            if (value > list.length - 1) {
-                value = 0;
-            }
-            chart = list[value];
-            image.src = chart.imagePath;
-            title.innerText = `[${chart.day}일] ${chart.dayOfWeek}요일 ${chart.hour}시`;
-            rangeInput.value = value;
-
-            //text 위치와 내용 조정
-            var position = startLeft + splitWidth * value;
-            dateText.style.left = `${position}px`;
-            dateText.innerText = `[${chart.dayOfWeek}] ${chart.hour}시`;
-        });
-
-        window.addEventListener('resize', function() {
-            // 화면 크기 변화를 감지했을 때 넓이를 측정하기 위해 존재
-            inputWidth = rangeInput.offsetWidth;
-            textWidth = dateText.offsetWidth;
-            splitWidth = inputWidth / (list.length + 1);
-
-            // 변화되었을때 알맞은 위치로 조정
-            value = rangeInput.value;
-            var position = startLeft + splitWidth * value;
-            dateText.style.left = `${position}px`;
-          });
-    </script>
-    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </html>
