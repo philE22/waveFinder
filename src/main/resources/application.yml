@@ -1,6 +1,6 @@
 spring:
   profiles:
     include: security
-logging:
-  file:
+  messages:
+    basename: messages
     encoding: UTF-8
