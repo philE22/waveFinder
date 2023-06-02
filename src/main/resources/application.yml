@@ -1,9 +1,6 @@
 spring:
   profiles:
     include: security
-server:
-  servlet:
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
+logging:
+  file:
+    encoding: UTF-8
