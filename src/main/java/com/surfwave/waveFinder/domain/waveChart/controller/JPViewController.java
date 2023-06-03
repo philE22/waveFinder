@@ -22,8 +22,6 @@ public class JPViewController {
 
     @GetMapping
     public String apiView(@RequestParam String region, Model model) {
-        log.info("한글 로그 테스트");
-        System.out.println("sout 로그 테스트");
         List<JPChartDto> chartDtos = crawler.getJpWaveChart(region);
         model.addAttribute("chartDtos", chartDtos);
         return "surf-image-range";
