@@ -26,31 +26,50 @@ public class AutoUploadService {
 
     //1, 7, 13, 19시 (6시간 간격으로)에 업데이트가 되고 새로운 차트가 2개씩 갱신되는 형태이므로 앞의 2개 이미지만 저장하면 됨
     @Scheduled(cron = "0 30 1,7,13,19 * * ?")
-    public void save() {
-        log.info("자동 이미지 저장 실행. 시간={}", LocalDateTime.now());
+    public void autoSaveJP() {
+        log.info("JP 자동 이미지 저장 실행. 시간={}", LocalDateTime.now());
         List<JPChartDto> jpList = crawler.getJpWaveChart("jp");
-        List<JPChartDto> sjpList = crawler.getJpWaveChart("sjp");
 
-    //TODO 마지막에 저장된 이미지 날짜가 앞의 2개 이미지와 같은지 확인하는 로직 추가해야함
-        saveList(jpList);
-        saveList(sjpList);
-    }
-
-    private void saveList(List<JPChartDto> jpList) {
+        //TODO 마지막에 저장된 이미지 날짜가 앞의 2개 이미지와 같은지 확인하는 로직 추가해야함
+        //확인 로직과 저장 로직을 메서드 분리하기
         for (int i = 0; i < 2; i++) {
             JPChartDto jpChartDto = jpList.get(i);
-            String region = jpChartDto.getRegion();
-            String imagePath = jpChartDto.getImagePath();
-
-            String savedPath = s3Service.upload(imagePath, region, generateFileName());
-            log.info("이미지 저장 완료 savedPath={}", savedPath);
-
-            ChartImageJP chartImageJP = jpChartImageRepository.save(jpChartDto.toEntity(savedPath));
-            log.info("jpChartImage 엔티티 저장 완료={}", chartImageJP);
+            if (!isExist(jpChartDto)) {
+                save(jpChartDto);
+            }
         }
     }
 
-    private static String generateFileName() {
+    @Scheduled(cron = "0 30 1,7,13,19 * * ?")
+    public void autoSaveSJP() {
+        log.info("SJP 자동 이미지 저장 실행. 시간={}", LocalDateTime.now());
+        List<JPChartDto> sjpList = crawler.getJpWaveChart("sjp");
+
+        for (int i = 0; i < 2; i++) {
+            JPChartDto jpChartDto = sjpList.get(i);
+            if (!isExist(jpChartDto)) {
+                save(jpChartDto);
+            }
+        }
+    }
+
+    private void save(JPChartDto jpChartDto) {
+        String region = jpChartDto.getRegion();
+        String imagePath = jpChartDto.getImagePath();
+        String fileName = generateFileName();
+
+        String savedPath = s3Service.upload(imagePath, region, fileName);
+        log.info("이미지 저장 완료 savedPath={}", savedPath);
+
+        ChartImageJP chartImageJP = jpChartImageRepository.save(jpChartDto.toEntity(savedPath));
+        log.info("jpChartImage 엔티티 저장 완료 id={}, imageDate={}, createdAt={}", chartImageJP.getId(), chartImageJP.getImageDate(), chartImageJP.getCreatedAt());
+    }
+
+    private boolean isExist(JPChartDto jpChartDto) {
+        return jpChartImageRepository.existsByRegionAndImageDate(jpChartDto.getRegion(), jpChartDto.getImageDate());
+    }
+
+    private String generateFileName() {
         return UUID.randomUUID().toString() + ".png";
     }
 }
