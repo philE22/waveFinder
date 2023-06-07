@@ -1,5 +1,6 @@
 package com.surfwave.waveFinder.domain.waveChart.entity;
 
+import com.surfwave.waveFinder.domain.waveChart.dto.JPChartDto;
 import com.surfwave.waveFinder.global.auditable.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,5 +30,9 @@ public class ChartImageJP extends Auditable {
         this.region = region;
         this.savedPath = savedPath;
         this.imageDate = imageDate;
+    }
+
+    public JPChartDto toDto() {
+        return new JPChartDto(this.region, this.savedPath, this.imageDate);
     }
 }

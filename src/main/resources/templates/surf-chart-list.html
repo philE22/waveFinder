@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="initial-scale=1, width=device-width" charset="UTF-8">
+    <title>파도 예보</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body class="container">
+    <header class="row mt-3 mx-auto">
+        <a type="button" class="btn btn-outline-primary col-xxl-1 col-md-2 col-sm-3 col-4" href="/">< 뒤로 가기</a>
+    </header>
+
+    <div class="title-wrap row pt-4">
+        <h1 id="title-left" class="col-3"></h1>
+        <h1 id="title-center" class="col-6 text-center">일요일 15시</h1>
+        <h1 id="title-right" class="col-3 text-center fs-2 align-self-end">(28일)</h1>
+    </div>
+
+    <ul class="list-group">
+        <li th:each="page : ${pageDtos}"
+            class="list-group-item" >
+            <a th:text="|${page.year}년 ${page.month}월 ${page.day}일자 차트|"
+               th:href="|/surf/jp/day?year=${page.year}&month=${page.month}&day=${page.day}|"></a>
+        </li>
+    </ul>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
