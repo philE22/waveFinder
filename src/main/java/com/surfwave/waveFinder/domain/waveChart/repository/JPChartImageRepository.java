@@ -10,5 +10,5 @@ public interface JPChartImageRepository extends JpaRepository<ChartImageJP, Long
 
     boolean existsByRegionAndImageDate(String region, LocalDateTime imageDate);
 
-    List<ChartImageJP> findByImageDateBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<ChartImageJP> findByRegionAndImageDateBetween(String region, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

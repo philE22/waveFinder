@@ -3,7 +3,6 @@ package com.surfwave.waveFinder.domain.waveChart.controller;
 import com.surfwave.waveFinder.domain.waveChart.dto.KRChartDto;
 import com.surfwave.waveFinder.domain.waveChart.service.KROpenAPIManager;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,6 @@ public class KRViewController {
         List<KRChartDto> chartDtos = apiManager.getKRWaveChartList(region.toUpperCase());
         model.addAttribute("chartDtos", chartDtos);
 
-        return "surf-image-range";
+        return "chartImagePage";
     }
 }

@@ -9,9 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -74,12 +71,4 @@ class KROpenAPIManagerTest {
         assertThat(krChartDto.getDay()).isEqualTo(24);
     }
 
-    @Test
-    void name() {
-        LocalDateTime now = LocalDateTime.now();
-//        now = now.truncatedTo(ChronoUnit.DAYS);
-        LocalDateTime start = LocalDateTime.of(2023, 5, 26, 0, 0);
-        long i = ChronoUnit.DAYS.between(start, now);
-        System.out.println("#######" + i);
-    }
 }
