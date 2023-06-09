@@ -22,7 +22,7 @@
     <div class="col-xl-6">
         <ul class="list-group">
             <div th:each="day : ${dayDtos}"
-                 class="list-group-item list-group-item-action d-flex justify-content-between">
+                 class="list-group-item d-flex justify-content-between">
                 <div th:text="|${day.year}년 ${day.month}월 ${day.day}일|" class="fs-5 align-self-center"></div>
                 <div class="button-wrap">
                     <a class="btn btn-outline-primary"
