@@ -35,6 +35,7 @@ public class AutoUploadService {
         for (int i = 0; i < 2; i++) {
             JPChartDto jpChartDto = jpList.get(i);
             if (!isExist(jpChartDto)) {
+                log.info("{}번 이미지 저장 시작", i);
                 save(jpChartDto);
             }
         }
@@ -48,12 +49,14 @@ public class AutoUploadService {
         for (int i = 0; i < 2; i++) {
             JPChartDto jpChartDto = sjpList.get(i);
             if (!isExist(jpChartDto)) {
+                log.info("{}번 이미지 저장 시작", i);
                 save(jpChartDto);
             }
         }
     }
 
     private void save(JPChartDto jpChartDto) {
+        log.info("저장 로직 시작");
         String region = jpChartDto.getRegion();
         String imagePath = jpChartDto.getImagePath();
         String fileName = generateFileName();
