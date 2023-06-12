@@ -70,6 +70,8 @@ public class AutoUploadService {
     }
 
     private String generateFileName() {
-        return UUID.randomUUID().toString() + ".png";
+        String fileName = UUID.randomUUID().toString() + ".png";
+        log.info("랜덤 fileName이 생성되었습니다={}", fileName);
+        return fileName;
     }
 }
