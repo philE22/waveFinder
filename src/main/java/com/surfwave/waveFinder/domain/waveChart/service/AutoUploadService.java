@@ -24,6 +24,8 @@ public class AutoUploadService {
     private final S3Service s3Service;
     private final JPChartImageRepository jpChartImageRepository;
 
+    //TODO 저장하려할때 이미지가 갱신되지 않은경우 처리 로직필요
+
     //1, 7, 13, 19시 (6시간 간격으로)에 업데이트가 되고 새로운 차트가 2개씩 갱신되는 형태이므로 앞의 2개 이미지만 저장하면 됨
     @Scheduled(cron = "0 30 1,7,13,19 * * ?")
     public void autoSaveJP() {

@@ -34,7 +34,7 @@ class JPChartServiceTest {
      */
 
     @Test
-    @DisplayName("1시 30분 59초까지는 그날이 dto에 포함되지않는다")
+    @DisplayName("1시 30분 59초까지는 당일이 dto에 포함되지않는다")
     void getDayDto31() {
         LocalDateTime today = LocalDateTime.of(2023, 5, 28, 1, 30, 59);
         List<DayDto> dayDto = service.getDayDto(today);
@@ -45,7 +45,7 @@ class JPChartServiceTest {
     }
 
     @Test
-    @DisplayName("1시 31분 이후면 그날이 dto에 포함된다")
+    @DisplayName("1시 31분이면 당일이 dto에 포함된다")
     void getDayDto2() {
         LocalDateTime today = LocalDateTime.of(2023, 5, 28, 1, 31, 0);
         List<DayDto> dayDto = service.getDayDto(today);
@@ -55,9 +55,21 @@ class JPChartServiceTest {
         assertThat(dayDto.get(1).getDay()).isEqualTo(27);
     }
     @Test
-    @DisplayName("0시 30분 이면 그날이 dto에 포함되지않는다")
+    @DisplayName("0시 30분 이면 당일이 dto에 포함되지않는다")
     void getDayDto3() {
         LocalDateTime today = LocalDateTime.of(2023, 5, 28, 0, 30, 0);
+        List<DayDto> dayDto = service.getDayDto(today);
+
+        assertThat(dayDto.size()).isEqualTo(2);
+        assertThat(dayDto.get(0).getDay()).isEqualTo(27);
+        assertThat(dayDto.get(1).getDay()).isEqualTo(26);
+    }
+
+
+    @Test
+    @DisplayName("0시 35분 00초는 당일이 dto에 포함되지않는다")
+    void getDayDto() {
+        LocalDateTime today = LocalDateTime.of(2023, 5, 28, 0, 35);
         List<DayDto> dayDto = service.getDayDto(today);
 
         assertThat(dayDto.size()).isEqualTo(2);

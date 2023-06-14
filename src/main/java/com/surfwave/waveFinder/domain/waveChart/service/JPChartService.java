@@ -36,8 +36,10 @@ public class JPChartService {
     public List<DayDto> getDayDto(LocalDateTime now) {
         ArrayList<DayDto> dayDtos = new ArrayList<>();
 
-        //1시 반 이전인지 확인해서 맞으면 하루 빼는 로직
-        if (now.getHour() <= 1 && now.getMinute() <= 30) {
+        //당일의 1시 반 이전인지 확인해서 맞으면 하루 빼는 로직
+        //당일 1시 31분 까지는 당일 0시 차트가 저장되지 않으므로 31분을 기준으로 삼음
+        LocalDateTime updateTime = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 1, 31);
+        if (now.isBefore(updateTime)) {
             now = now.minusDays(1);
         }
 
