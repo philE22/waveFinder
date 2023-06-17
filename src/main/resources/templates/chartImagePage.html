@@ -1,72 +1,83 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" charset="UTF-8">
-        <title>파도 예보</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-        <style>
+<head>
+    <meta name="viewport" content="initial-scale=1, width=device-width" charset="UTF-8">
+    <title>파도 예보</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
             html, body {
                 touch-action: manipulation;
                 -ms-touch-action: manipulation;
             }
-        </style>
-    </head>
 
-    <body class="container" th:onload="preloadImages(); startRefreshing()">
-        <header class="row mt-3 mx-auto">
-            <a type="button" class="btn btn-outline-primary col-xxl-1 col-md-2 col-sm-3 col-4" onclick="goBack()">< 뒤로 가기</a>
+    </style>
+</head>
 
-            <div class="dropdown col">
-                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    WSB 파도 웹캠
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><h6 class="dropdown-header">양양</h6></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/rrF8q" target="_blank">죽도 해변</a></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/DRW5B" target="_blank">인구 해변</a></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/veXox" target="_blank">기사문 해변</a></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/m6UvU" target="_blank">갯마을 해변</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">부산</h6></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/XaBOj" target="_blank">송정 해변</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">태안</h6></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/6N0Ay" target="_blank">만리포 해변</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">제주</h6></li>
-                    <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/l2DQD" target="_blank">월정 해변</a></li>
-                    <li><a class="dropdown-item" href="http://www.nowjejuplus.co.kr/cctv/6 " target="_blank">중문 해변 (나우제주캠)</a></li>
-                </ul>
+<body class="container" th:onload="preloadImages(); startRefreshing()">
+<header class="row mt-3 mx-auto">
+    <a type="button" class="btn btn-outline-primary col-xxl-1 col-md-2 col-sm-3 col-4" onclick="goBack()">< 뒤로 가기</a>
+
+    <div class="dropdown col">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            WSB 파도 웹캠
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><h6 class="dropdown-header">양양</h6></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/rrF8q" target="_blank">죽도 해변</a></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/DRW5B" target="_blank">인구 해변</a></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/veXox" target="_blank">기사문 해변</a></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/m6UvU" target="_blank">갯마을 해변</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><h6 class="dropdown-header">부산</h6></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/XaBOj" target="_blank">송정 해변</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><h6 class="dropdown-header">태안</h6></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/6N0Ay" target="_blank">만리포 해변</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><h6 class="dropdown-header">제주</h6></li>
+            <li><a class="dropdown-item" href="https://www.wsbfarm.com/su/l2DQD" target="_blank">월정 해변</a></li>
+            <li><a class="dropdown-item" href="http://www.nowjejuplus.co.kr/cctv/6 " target="_blank">중문 해변 (나우제주캠)</a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<div class="title-wrap row pt-4">
+    <h1 id="title-left" class="col-3"></h1>
+    <h1 id="title-center" class="col-6 text-center"
+        th:text="|${chartDtos[0].dayOfWeek}요일 ${chartDtos[0].hour}시|">일요일 15시</h1>
+    <h1 id="title-right" class="col-3 text-center fs-2 align-self-end"
+        th:text="|(${chartDtos[0].day}일)|">(28일)</h1>
+</div>
+
+<div id="contents-container" class="row justify-content-center">
+    <img id="image" th:src="${chartDtos[0].imagePath}" alt="이미지" class="col-lg-8">
+
+    <div id="button-container" class="row col-lg-4 justify-content-center align-self-center">
+        <div class="row my-2">
+            <button id="prev-btn" class="all-btn btn btn-lg btn-outline-secondary col">< 이전</button>
+            <button id="next-btn" class="all-btn btn btn-lg btn-outline-secondary col">이후 ></button>
+        </div>
+        <div class="range">
+            <input type="range" class="form-range" min="0" th:max="${#lists.size(chartDtos)-1}" value="0"
+                   id="imageRange">
+            <div id="rangeInputText" class="position-relative">
+                <p th:text="|[${chartDtos[0].dayOfWeek}] ${chartDtos[0].hour}시|"></p>
             </div>
-        </header>
-
-        <div class="title-wrap row pt-4">
-            <h1 id="title-left" class="col-3"></h1>
-            <h1 id="title-center" class="col-6 text-center"
-                th:text="|${chartDtos[0].dayOfWeek}요일 ${chartDtos[0].hour}시|">일요일 15시</h1>
-            <h1 id="title-right" class="col-3 text-center fs-2 align-self-end"
-                th:text="|(${chartDtos[0].day}일)|">(28일)</h1>
         </div>
 
-        <div id="contents-container" class="row justify-content-center">
-            <img id="image" th:src="${chartDtos[0].imagePath}" alt="이미지" class="col-lg-8">
-
-            <div id="button-container" class="row col-lg-4 justify-content-center align-self-center">
-                <div class="row my-2">
-                    <button id="prev-btn" class="all-btn btn btn-lg btn-outline-secondary col">< 이전</button>
-                    <button id="next-btn" class="all-btn btn btn-lg btn-outline-secondary col">이후 ></button>
-                </div>
-                <div class="range">
-                    <input type="range" class="form-range" min="0" th:max="${#lists.size(chartDtos)-1}" value="0" id="imageRange">
-                    <div id="rangeInputText" class="position-relative">
-                        <p th:text="|[${chartDtos[0].dayOfWeek}] ${chartDtos[0].hour}시|"></p>
-                    </div>
-                </div>
-
-            </div>
-            <h1 class="fs-5">일본 차트는 1:30, 7:30, 13:30, 19:30에 업데이트됩니다.</h1>
-        </div>
-        <script th:inline="javascript">
+    </div>
+</div>
+<h1 class="fs-5">일본 차트는 1:30, 7:30, 13:30, 19:30에 업데이트됩니다.</h1>
+<script th:inline="javascript">
 
 
             const prevButton = document.getElementById("prev-btn");
@@ -167,7 +178,10 @@
             function startRefreshing() {
               setInterval(refreshPage, 600000);
             }
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    </body>
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
 </html>
