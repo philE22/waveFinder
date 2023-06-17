@@ -62,6 +62,8 @@
                         <p th:text="|[${chartDtos[0].dayOfWeek}] ${chartDtos[0].hour}시|"></p>
                     </div>
                 </div>
+
+                <h1 class="fs-5">일본 차트는 1:30, 7:30, 13:30, 19:30에 업데이트됩니다.</h1>
             </div>
         </div>
         <script th:inline="javascript">
@@ -86,7 +88,7 @@
 
             function changeImageAndTitleText (chart) {
                 image.src = chart.imagePath;
-                titleCenter.innerText = `${chart.dayOfWeek}요일 ${chart.hour}시`;
+                titleCenter.innerText = `${chart.dayOfWeek}요일 ${chart.hour}시`;가
                 titleRight.innerText = `(${chart.day}일)`;
             }
 
