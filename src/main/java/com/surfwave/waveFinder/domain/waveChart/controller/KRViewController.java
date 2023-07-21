@@ -21,6 +21,7 @@ public class KRViewController {
     public String apiView(@RequestParam String region, Model model) {
         List<KRChartDto> chartDtos = apiManager.getKRWaveChartList(region.toUpperCase());
         model.addAttribute("chartDtos", chartDtos);
+        model.addAttribute("backUrl", "/");
 
         return "chartImagePage";
     }

@@ -28,6 +28,7 @@ public class JPViewController {
     public String apiView(@RequestParam String region, Model model) {
         List<JPChartDto> chartDtos = crawler.getJpWaveChart(region);
         model.addAttribute("chartDtos", chartDtos);
+        model.addAttribute("backUrl", "/");
 
         return "chartImagePage";
     }
@@ -48,6 +49,7 @@ public class JPViewController {
 
         List<JPChartDto> chartDtos = service.getDayChart(region, year, month, day);
         model.addAttribute("chartDtos", chartDtos);
+        model.addAttribute("backUrl", "/surf/jp/list");
 
         return "chartImagePage";
     }
